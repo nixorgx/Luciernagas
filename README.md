@@ -71,3 +71,8 @@ Las fotografías están disponibles bajo la [licencia de Unsplash](https://unspl
 ## Próximas decisiones recomendadas
 
 Antes de publicar una campaña real, define el correo o canal de contacto oficial, responsable del proyecto, criterios de recepción de materiales, protección de datos y derechos de imagen de participantes. Más adelante se puede integrar un formulario a un backend o servicio propio.
+
+
+## Actualización visual — noviembre de 2026
+
+La barra superior y el menú acompañan el desplazamiento; la navegación resalta la sección visible. Se sustituyeron los caracteres decorativos en forma de asterisco por puntos luminosos animados, con opción de movimiento reducido. Las fotografías son reales y documentales de Bolivia, con créditos visibles al pie de la web y enlaces a sus fichas de licencia. No muestran actividades organizadas por Luciérnagas. Se conserva el modo de revisión con `?review=1`.
