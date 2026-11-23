@@ -69,3 +69,151 @@
     catch { showFeedback('Selecciona el mensaje para copiarlo manualmente.'); }
   });
 })();
+
+
+/* Modo de revisión: disponible únicamente con ?review=1 */
+(() => {
+  "use strict";
+  if (new URLSearchParams(location.search).get("review") !== "1") return;
+  const key = "luciernagas-review:" + location.pathname;
+  const css = [
+    "#lr-review{position:fixed;z-index:2147483001;right:18px;bottom:18px;width:min(365px,calc(100vw - 24px));max-height:82vh;overflow:auto;background:#fbf7ec;color:#183d36;padding:20px;border:1px solid #decda8;border-radius:22px;box-shadow:0 22px 65px #12382d44;font:14px/1.4 system-ui,sans-serif}",
+    "#lr-review *{box-sizing:border-box}#lr-review h2{font:600 22px/1.2 Georgia,serif;margin:0 0 6px}#lr-review p{font-size:12px;color:#53665d;margin:0 0 12px}",
+    "#lr-review textarea{display:block;width:100%;height:88px;resize:vertical;padding:11px;border:1px solid #c6d0be;border-radius:10px;font:inherit;background:#fffef9;color:#173d35}",
+    "#lr-review .lr-row{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}#lr-review button{border:1px solid #1d5047;background:#1d5047;color:white;border-radius:100px;padding:9px 12px;cursor:pointer;font:600 12px system-ui}",
+    "#lr-review button.lr-quiet{background:transparent;color:#1d5047}#lr-review .lr-meta{background:#e5eddf;border-radius:10px;padding:10px;font-size:12px;overflow-wrap:anywhere}",
+    "#lr-review label{display:block;font-weight:700;margin:12px 0 5px}#lr-review ol{padding-left:20px;max-height:120px;overflow:auto}#lr-review li{font-size:12px;margin-bottom:8px;overflow-wrap:anywhere}",
+    "#lr-review [role=status]{min-height:20px;font-size:12px;color:#316a4d}#lr-review button:focus-visible,#lr-review textarea:focus-visible{outline:3px solid #e7ad4a;outline-offset:3px}",
+    "#lr-review .lr-header{display:flex;align-items:start;justify-content:space-between;gap:12px}#lr-review.lr-small{width:auto}#lr-review.lr-small .lr-content{display:none}",
+    "#lr-review-outline{position:fixed;pointer-events:none;z-index:2147483000;display:none;outline:2px dashed #c58b2d;outline-offset:2px;background:#e7ad4a26;border-radius:5px}",
+    "@media(max-width:600px){#lr-review{right:8px;bottom:8px;width:calc(100vw - 16px);padding:15px;max-height:72vh}}"
+  ].join("\n");
+  const stylesheet = document.createElement("style");
+  stylesheet.textContent = css;
+  document.head.appendChild(stylesheet);
+
+  const panel = document.createElement("aside");
+  panel.id = "lr-review";
+  panel.setAttribute("aria-label", "Revisión visual del sitio");
+  panel.innerHTML = [
+    '<div class="lr-header"><h2>Revisar Luciérnagas ✳</h2><button class="lr-quiet" type="button" id="lr-min">Ocultar</button></div>',
+    '<div class="lr-content"><p>Selecciona un texto, imagen o sección de la página. Describe el cambio y guárdalo.</p>',
+    '<div class="lr-meta" id="lr-target">Ningún elemento seleccionado.</div>',
+    '<label for="lr-note">Cambio solicitado</label><textarea id="lr-note" placeholder="Ejemplo: cambia esta foto por una de un taller de lectura."></textarea>',
+    '<div class="lr-row"><button id="lr-add" type="button">Guardar cambio</button><button id="lr-copy" class="lr-quiet" type="button">Copiar para ChatGPT</button></div>',
+    '<label>Indicaciones guardadas: <span id="lr-count">0</span></label><ol id="lr-list"></ol>',
+    '<div role="status" id="lr-status" aria-live="polite"></div>',
+    '<div class="lr-row"><button id="lr-clear" class="lr-quiet" type="button">Borrar</button><button id="lr-exit" class="lr-quiet" type="button">Salir del modo</button></div>',
+    '<p>Los cambios se guardan en este navegador. Usa “Copiar para ChatGPT” y pega el texto en nuestra conversación para que pueda aplicarlos.</p></div>'
+  ].join("");
+  document.body.appendChild(panel);
+  const outline = document.createElement("div");
+  outline.id = "lr-review-outline";
+  document.body.appendChild(outline);
+  const byId = id => document.getElementById(id);
+  let selected = null;
+  let notes = [];
+  try {
+    const saved = JSON.parse(localStorage.getItem(key) || "[]");
+    if (Array.isArray(saved)) notes = saved.filter(x => x && typeof x.note === "string").slice(0,100);
+  } catch (_) {}
+
+  function targetFor(node) {
+    if (!(node instanceof Element) || node.closest("#lr-review")) return null;
+    return node.closest("h1,h2,h3,p,img,a,button,summary,article,section,header,footer") || node.closest("main,nav");
+  }
+  function describe(node) {
+    const label = (node.getAttribute("alt") || node.innerText || node.textContent || "").replace(/\s+/g, " ").trim().slice(0,100);
+    return node.tagName.toLowerCase() + " · " + (label || "Elemento visual");
+  }
+  function selector(node) {
+    const parts = [];
+    for (let n = node; n && n !== document.body && parts.length < 8; n = n.parentElement) {
+      if (n.id) { parts.unshift("#" + CSS.escape(n.id)); break; }
+      let s = n.tagName.toLowerCase();
+      if (n.parentElement) {
+        const siblings = [...n.parentElement.children].filter(x => x.tagName === n.tagName);
+        if (siblings.length > 1) s += ":nth-of-type(" + (siblings.indexOf(n) + 1) + ")";
+      }
+      parts.unshift(s);
+    }
+    return parts.join(" > ");
+  }
+  function paint(node) {
+    if (!node || !node.isConnected) { outline.style.display = "none"; return; }
+    const r = node.getBoundingClientRect();
+    if (!r.width || !r.height) { outline.style.display = "none"; return; }
+    Object.assign(outline.style,{display:"block",left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"});
+  }
+  function status(text) { byId("lr-status").textContent = text; }
+  function redraw() {
+    byId("lr-count").textContent = notes.length;
+    const list = byId("lr-list");
+    list.replaceChildren();
+    notes.forEach((entry,i) => {
+      const li = document.createElement("li");
+      const heading = document.createElement("strong");
+      heading.textContent = (i+1)+". "+entry.element;
+      li.append(heading,document.createElement("br"),document.createTextNode(entry.note));
+      list.appendChild(li);
+    });
+  }
+  function saveLocal() { try { localStorage.setItem(key,JSON.stringify(notes)); } catch (_) {} }
+
+  document.addEventListener("pointermove", e => {
+    if (!selected && !e.target.closest("#lr-review")) paint(targetFor(e.target));
+  }, {passive:true});
+  document.addEventListener("click", e => {
+    if (e.target.closest("#lr-review")) return;
+    const node = targetFor(e.target);
+    if (!node) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    selected = node;
+    paint(node);
+    byId("lr-target").textContent = "Seleccionado: " + describe(node);
+    status("Elemento seleccionado. Indica el cambio que deseas.");
+    byId("lr-note").focus();
+  }, true);
+  window.addEventListener("scroll", () => { if (selected) paint(selected); }, {passive:true});
+  window.addEventListener("resize", () => { if (selected) paint(selected); }, {passive:true});
+  byId("lr-add").addEventListener("click", () => {
+    const note = byId("lr-note").value.trim();
+    if (!selected) return status("Selecciona un elemento de la página primero.");
+    if (!note) return status("Escribe el cambio que quieres realizar.");
+    notes.push({element:describe(selected),selector:selector(selected),note});
+    saveLocal(); redraw();
+    byId("lr-note").value = "";
+    selected = null; outline.style.display = "none";
+    byId("lr-target").textContent = "Selecciona otro elemento.";
+    status("Cambio guardado.");
+  });
+  byId("lr-copy").addEventListener("click", async () => {
+    if (!notes.length) return status("Guarda al menos un cambio primero.");
+    const text = ["Cambios para Luciérnagas","Sitio: "+location.origin+location.pathname,""].concat(
+      notes.flatMap((x,i) => [(i+1)+". Elemento: "+x.element,"   Selector: "+x.selector,"   Cambio solicitado: "+x.note,""])
+    ).join("\n");
+    try {
+      await navigator.clipboard.writeText(text);
+      status("Copiado. Pega el texto en nuestra conversación de ChatGPT.");
+    } catch (_) {
+      byId("lr-note").value = text;
+      byId("lr-note").focus(); byId("lr-note").select();
+      status("Copia el texto seleccionado y pégalo en ChatGPT.");
+    }
+  });
+  byId("lr-clear").addEventListener("click", () => {
+    if (!notes.length || !confirm("¿Borrar todas las indicaciones guardadas?")) return;
+    notes = []; saveLocal(); redraw(); status("Indicaciones borradas.");
+  });
+  byId("lr-exit").addEventListener("click", () => {
+    const url = new URL(location.href);
+    url.searchParams.delete("review");
+    location.assign(url.href);
+  });
+  byId("lr-min").addEventListener("click", () => {
+    const small = panel.classList.toggle("lr-small");
+    byId("lr-min").textContent = small ? "Mostrar" : "Ocultar";
+  });
+  redraw();
+})();
