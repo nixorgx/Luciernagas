@@ -43,7 +43,7 @@
     const data = { title: 'Luciérnagas — Luz para su mañana', text: shareText };
     if (projectUrl) data.url = projectUrl;
     if (navigator.share) {
-      try { await navigator.share(data); showFeedback('Gracias por compartir nuestra luz ✳'); }
+      try { await navigator.share(data); showFeedback('Gracias por compartir nuestra luz '); }
       catch (error) { if (error.name !== 'AbortError') showFeedback('Puedes compartir este sitio copiando su dirección.'); }
     } else {
       try { const ok = await copy(`${shareText}${projectUrl ? `\n${projectUrl}` : ''}`); showFeedback(ok ? 'Mensaje copiado. ¡Gracias por compartirlo!' : 'No se pudo copiar. Prueba copiando la dirección de esta página.'); }
@@ -96,7 +96,7 @@
   panel.id = "lr-review";
   panel.setAttribute("aria-label", "Revisión visual del sitio");
   panel.innerHTML = [
-    '<div class="lr-header"><h2>Revisar Luciérnagas ✳</h2><button class="lr-quiet" type="button" id="lr-min">Ocultar</button></div>',
+    '<div class="lr-header"><h2>Revisar Luciérnagas </h2><button class="lr-quiet" type="button" id="lr-min">Ocultar</button></div>',
     '<div class="lr-content"><p>Selecciona un texto, imagen o sección de la página. Describe el cambio y guárdalo.</p>',
     '<div class="lr-meta" id="lr-target">Ningún elemento seleccionado.</div>',
     '<label for="lr-note">Cambio solicitado</label><textarea id="lr-note" placeholder="Ejemplo: cambia esta foto por una de un taller de lectura."></textarea>',
@@ -216,4 +216,24 @@
     byId("lr-min").textContent = small ? "Mostrar" : "Ocultar";
   });
   redraw();
+})();
+
+
+/* Renovación: barra compacta en scroll y enlace activo según sección visible. */
+(() => {
+  const onScroll = () => document.documentElement.classList.toggle('is-scrolled', window.scrollY > 20);
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+  const links = Array.from(document.querySelectorAll('.primary-nav a[href^="#"]'));
+  if (!('IntersectionObserver' in window) || !links.length) return;
+  const sections = links.map(link => ({link,element:document.querySelector(link.getAttribute('href'))})).filter(item => item.element);
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      links.forEach(link => link.classList.remove('is-active'));
+      const current = sections.find(item=>item.element===entry.target);
+      if (current) current.link.classList.add('is-active');
+    });
+  },{rootMargin:'-35% 0px -48% 0px',threshold:0});
+  sections.forEach(item=>observer.observe(item.element));
 })();
