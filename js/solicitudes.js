@@ -119,14 +119,17 @@
         })
       });
       if(!res.ok) {
-        if(res.status===429)throw Error('too_many');
+        const detail=await res.json().catch(()=>({}));
+        const msg=String(detail.message||'');
+        if(res.status===429||msg.includes('RECEPCION_TEMPORALMENTE_LIMITADA'))throw Error('too_many');
+        if(msg.includes('CONTACTO_TEMPORALMENTE_LIMITADO'))throw Error('contact_limit');
         throw Error('backend_'+res.status);
       }
       try{localStorage.setItem(lastKey,String(Date.now()));}catch(_){}
       announce('¡Recibimos tu propuesta! Quedó registrada para que el equipo de Luciérnagas pueda revisarla y contactarte.','success');
       form.reset();
     }catch(err){
-      announce(err.message==='too_many'?'Hay demasiadas solicitudes. Intenta nuevamente más adelante.':'No se pudo confirmar el registro. Comprueba tu conexión e inténtalo más tarde. No damos por recibida tu propuesta.','error');
+      announce(err.message==='too_many'?'Alcanzamos el límite diario de propuestas. Inténtalo mañana.':err.message==='contact_limit'?'Este contacto ya alcanzó su límite de propuestas de hoy. Podrás enviar otra en 24 horas.':'No se pudo confirmar el registro. Comprueba tu conexión e inténtalo más tarde. No damos por recibida tu propuesta.','error');
     }finally{busy=false;button.disabled=false;button.firstChild.textContent=oldLabel;}
   });
 })();

@@ -15,7 +15,7 @@ Capturar propuestas de donación de libros y útiles, tutorías gratuitas, talle
 - \`admin/admin.css\`: diseño del panel.
 - \`supabase/schema.sql\`: tablas, restricciones, permisos y políticas RLS.
 
-## Activación (pendiente)
+## Estado de activación (23 de noviembre de 2026)
 
 1. Crea o selecciona **un proyecto de Supabase dedicado a Luciérnagas**. No uses la base de datos de Tunari Fire Monitor por defecto.
 2. Abre **SQL Editor** del proyecto y ejecuta \`supabase/schema.sql\`. Revisa la consulta antes de ejecutarla si el proyecto ya contiene objetos con los mismos nombres.
@@ -25,7 +25,7 @@ Capturar propuestas de donación de libros y útiles, tutorías gratuitas, talle
 6. Publica la actualización de GitHub Pages y abre \`/admin/\` con la cuenta autorizada.
 7. Prueba con una solicitud ficticia y comprueba en el panel que llegó, y que una sesión no autorizada no puede consultar propuestas ni notas.
 
-Hasta que completes la configuración, el formulario **no envía datos**. Permite copiar una propuesta e informa explícitamente de esa limitación.
+**El formulario público ya se ha conectado a Supabase.** El acceso al panel sigue pendiente de habilitar una cuenta administrativa. No se han enviado propuestas reales.
 
 ## Estados de seguimiento
 
