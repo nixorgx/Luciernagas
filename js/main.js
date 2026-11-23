@@ -217,23 +217,3 @@
   });
   redraw();
 })();
-
-
-/* Renovación: barra compacta en scroll y enlace activo según sección visible. */
-(() => {
-  const onScroll = () => document.documentElement.classList.toggle('is-scrolled', window.scrollY > 20);
-  onScroll();
-  window.addEventListener('scroll', onScroll, {passive:true});
-  const links = Array.from(document.querySelectorAll('.primary-nav a[href^="#"]'));
-  if (!('IntersectionObserver' in window) || !links.length) return;
-  const sections = links.map(link => ({link,element:document.querySelector(link.getAttribute('href'))})).filter(item => item.element);
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      links.forEach(link => link.classList.remove('is-active'));
-      const current = sections.find(item=>item.element===entry.target);
-      if (current) current.link.classList.add('is-active');
-    });
-  },{rootMargin:'-35% 0px -48% 0px',threshold:0});
-  sections.forEach(item=>observer.observe(item.element));
-})();

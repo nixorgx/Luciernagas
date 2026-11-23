@@ -16,30 +16,47 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/experience.css" />
   <script defer src="js/main.js"></script>
+  <script defer src="js/experience.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
-  <div class="ambient-fireflies" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-  <div class="top-shell">
-  <div class="announcement"><span class="announcement-spark" aria-hidden="true"></span> Una idea pequeña puede encender un futuro enorme. <a href="#sumate">Sé parte del comienzo <span aria-hidden="true">↗</span></a></div>
-  <header class="site-header" id="inicio">
-    <div class="container nav-shell">
-      <a class="brand" href="#inicio" aria-label="Luciérnagas, ir al inicio">
-        <img src="assets/isotipo.webp" width="45" height="40" alt="" />
-        <span class="brand-copy"><strong>Luciérnagas</strong><small>Luz para su mañana</small></span>
-      </a>
-      <nav class="primary-nav" aria-label="Navegación principal" id="primary-nav">
-        <a href="#nosotros">Nuestra esencia</a>
-        <a href="#que-hacemos">Qué hacemos</a>
-        <a href="#como-ayudar">Cómo ayudar</a>
-        <a href="#preguntas">Preguntas</a>
-      </nav>
-      <a class="button button-dark nav-cta" href="#sumate">Quiero sumarme <span aria-hidden="true">↗</span></a>
-      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav"><span></span><span></span></button>
+  <div class="ambient-layer" aria-hidden="true"><canvas id="firefly-canvas"></canvas></div>
+  <div class="top-shell" id="site-top">
+    <div class="top-shell-glow" aria-hidden="true"></div>
+    <div class="announcement">
+      <div class="announcement-meta"><span class="live-dot" aria-hidden="true"></span><span>DESDE BOLIVIA</span><span class="announcement-divider" aria-hidden="true"></span><span>UNA INICIATIVA EN FORMACIÓN</span></div>
+      <span class="announcement-message">La esperanza comienza cuando compartimos.</span>
+      <a class="announcement-action" href="#sumate">Seamos parte del cambio <span aria-hidden="true">↗</span></a>
     </div>
-  </header>
+    <header class="site-header" id="inicio">
+      <div class="container nav-shell">
+        <a class="brand" href="#inicio" aria-label="Luciérnagas, volver al inicio">
+          <span class="brand-emblem"><img src="assets/isotipo.webp" width="48" height="48" alt="" /></span>
+          <span class="brand-copy"><strong>Luciérnagas</strong><small>Luz para su mañana</small></span>
+        </a>
+        <nav class="primary-nav" aria-label="Navegación principal" id="primary-nav">
+          <a href="#inicio" class="is-active" aria-current="page">Inicio</a>
+          <a href="#nosotros">Nuestra esencia</a>
+          <a href="#que-hacemos">Programas</a>
+          <a href="#como-ayudar">Cómo ayudar</a>
+          <a href="#preguntas">Preguntas</a>
+          <span class="nav-ink" aria-hidden="true"></span>
+          <a href="#sumate" class="mobile-join-link">Quiero ser parte <span aria-hidden="true">↗</span></a>
+        </nav>
+        <div class="nav-tools">
+          <span class="nav-identity">Educación que ilumina</span>
+          <a class="button button-dark nav-cta" href="#sumate">Quiero sumarme <span class="cta-arrow" aria-hidden="true">↗</span></a>
+          <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <div class="reading-track" aria-hidden="true"><div id="reading-progress"></div></div>
   </div>
+  <div class="header-spacer" aria-hidden="true"></div>
   <main id="contenido">
     <section class="hero section-pad" aria-labelledby="hero-heading">
       <div class="hero-glow" aria-hidden="true"></div>
@@ -161,6 +178,6 @@
       <p>Licencias: <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> y <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.</p>
     </details>
   </div>
-  <footer class="footer"><div class="container footer-main"><div class="footer-brand"><a href="#inicio" class="footer-logo"><img src="assets/isotipo.webp" width="65" height="58" alt="" /><span><strong>Luciérnagas</strong><small>Luz para su mañana</small></span></a><p>Creemos en el poder de compartir oportunidades para que más sueños encuentren su camino.</p></div><div class="footer-links"><div><h3>Explora</h3><a href="#nosotros">Nuestra esencia</a><a href="#que-hacemos">Qué hacemos</a><a href="#como-ayudar">Cómo ayudar</a></div><div><h3>Conecta</h3><a href="#sumate">Quiero sumarme</a><a href="#preguntas">Preguntas frecuentes</a><button type="button" id="footer-share">Compartir Luciérnagas ↗</button></div></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> Luciérnagas. Hecho con propósito en Bolivia.</span><span>Iniciativa social en formación · Fotografías de Bolivia con atribución</span><a href="#inicio">Volver arriba ↑</a></div></footer>
+  <footer class="footer"><div class="container footer-main"><div class="footer-brand"><a href="#inicio" class="footer-logo"><img src="assets/isotipo.webp" width="65" height="58" alt="" /><span><strong>Luciérnagas</strong><small>Luz para su mañana</small></span></a><p>Creemos en el poder de compartir oportunidades para que más sueños encuentren su camino.</p></div><div class="footer-links"><div><h3>Explora</h3><a href="#nosotros">Nuestra esencia</a><a href="#que-hacemos">Qué hacemos</a><a href="#como-ayudar">Cómo ayudar</a></div><div><h3>Conecta</h3><a href="#sumate">Quiero sumarme</a><a href="#preguntas">Preguntas frecuentes</a><button type="button" id="footer-share">Compartir Luciérnagas ↗</button></div></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> Luciérnagas. Hecho con propósito en Bolivia.</span><span>Iniciativa social en formación · Fotografías de Bolivia con atribución</span><button type="button" id="ambient-motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="Pausar luciérnagas animadas">Pausar luciérnagas</button><a href="#inicio">Volver arriba ↑</a></div></footer>
 </body>
 </html>
