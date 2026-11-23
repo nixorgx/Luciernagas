@@ -1,0 +1,37 @@
+/* Formulario público de participación */
+.join-panel-intake{max-width:640px}
+.intake-intro{color:#546a5e;font-size:13px;line-height:1.75;margin:-6px 0 18px}
+.intake-form{display:grid;gap:17px}
+.intake-types{min-width:0;border:0;padding:0;margin:0}
+.intake-types legend{font-size:11px;letter-spacing:.08em;font-weight:800;color:#355547;text-transform:uppercase;margin-bottom:10px}
+.intake-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.intake-options label{position:relative;cursor:pointer;display:block;min-width:0}
+.intake-options label:last-child{grid-column:1/-1}
+.intake-options input{position:absolute;opacity:0;width:1px;height:1px}
+.intake-options span{display:flex;min-height:65px;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:13px 12px;border:1px solid rgba(26,76,59,.16);border-radius:13px;background:#fcfaf4;color:#3b6050;transition:border-color .2s,background .2s,box-shadow .2s,transform .2s}
+.intake-options b{font-size:12px;line-height:1.2}
+.intake-options small{color:#819287;font-size:10px;line-height:1.35}
+.intake-options input:checked+span{background:#eaf2e5;border-color:#4b836e;box-shadow:0 0 0 1px rgba(54,120,89,.12);transform:translateY(-1px)}
+.intake-options input:focus-visible+span{outline:3px solid #d9a553;outline-offset:3px}
+.intake-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.intake-field{display:flex;flex-direction:column;gap:7px;font-size:11px;font-weight:700;color:#345d4a}
+.intake-field>span{color:#ba7942}
+.intake-wide{grid-column:1/-1}
+.intake-field input,.intake-field textarea{width:100%;background:#fffdf8;border:1px solid rgba(36,88,68,.2);border-radius:11px;padding:12px 13px;min-height:45px;font-size:13px;color:#234a3e;outline:none;transition:border .2s,box-shadow .2s}
+.intake-field textarea{min-height:110px;resize:vertical;line-height:1.6}
+.intake-field input:focus,.intake-field textarea:focus{border-color:#6b987e;box-shadow:0 0 0 3px rgba(87,151,114,.12)}
+.intake-field input::placeholder,.intake-field textarea::placeholder{color:#a3aea4}
+.intake-consent{display:flex;align-items:flex-start;gap:9px;font-size:11px;line-height:1.6;color:#526b5d;cursor:pointer}
+.intake-consent input{accent-color:#235a45;flex:0 0 16px;height:16px;margin:2px 0 0}
+.intake-privacy{font-size:10px;line-height:1.6;color:#708073;margin:-8px 0 0}
+.intake-submit{width:100%;min-height:47px}
+.intake-submit:disabled{opacity:.68;cursor:progress}
+.intake-status{background:rgba(225,234,218,.72);border:1px solid rgba(27,85,60,.11);border-radius:12px;color:#375d49;padding:11px 13px;font-size:11px;line-height:1.6;margin:0}
+.intake-status[data-state="error"]{background:#fff1e9;color:#9b4736;border-color:#e7b5a0}
+.intake-status[data-state="success"]{background:#e6f5e4;color:#236540;border-color:#8dbb9b}
+.intake-status[data-state="pending"]{background:#fcf3df;color:#7d6339}
+.intake-trap{position:absolute!important;left:-99999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.footer .admin-entry{opacity:.72;font-size:11px}
+.footer .admin-entry:hover{opacity:1}
+@media(max-width:600px){.intake-options{grid-template-columns:1fr 1fr}.intake-fields{grid-template-columns:1fr}.intake-field{grid-column:1/-1}.intake-options span{min-height:76px}.join-panel-intake{padding-inline:20px}}
+@media(max-width:380px){.intake-options{grid-template-columns:1fr}.intake-options label:last-child{grid-column:auto}}

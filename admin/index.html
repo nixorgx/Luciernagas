@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#173e36"><meta name="robots" content="noindex,nofollow,noarchive">
+<title>Coordinación · Luciérnagas</title>
+<link rel="icon" href="../assets/favicon.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<script defer src="../js/backend-config.js"></script>
+<script type="module" src="admin.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="bar">
+  <a class="brand" href="../"><img src="../assets/isotipo.webp" alt="" width="46" height="46"><span><strong>Luciérnagas</strong><small>Centro de coordinación</small></span></a>
+  <span class="bar-label">ESPACIO DEL EQUIPO</span>
+  <div class="account" id="account" hidden><span id="account-name"></span><button id="logout" type="button">Cerrar sesión</button></div>
+</header>
+<main id="main">
+<section class="gate" id="setup" hidden>
+  <span class="eyebrow">CONFIGURACIÓN PENDIENTE</span><h1>Preparado para coordinar.</h1>
+  <p>El sistema visual ya está construido. Para activar la recepción y el acceso privado hay que conectar un proyecto de Supabase y aplicar el esquema de la carpeta <code>supabase/</code>.</p>
+  <p>Por seguridad, no coloques contraseñas ni claves privadas en archivos del sitio.</p>
+  <a class="primary-link" target="_blank" rel="noopener noreferrer" href="https://supabase.com/dashboard">Abrir Supabase</a>
+</section>
+<section class="gate" id="login-view" hidden>
+  <span class="eyebrow">ÁREA PRIVADA</span><h1>Organicemos cada oportunidad.</h1>
+  <p>Entra con una cuenta de coordinación autorizada. Las solicitudes no son públicas.</p>
+  <form id="login-form" class="login-form">
+    <label>Correo electrónico<input type="email" id="login-email" required autocomplete="username" placeholder="tu@correo.com"></label>
+    <label>Contraseña<input type="password" id="login-password" required autocomplete="current-password" placeholder="Contraseña"></label>
+    <button type="submit" class="primary" id="login-button">Entrar al panel</button>
+    <p class="status" id="login-status" role="status" aria-live="polite"></p>
+  </form>
+  <a class="back" href="../">Volver a la página pública</a>
+</section>
+<section id="dashboard" class="dashboard" hidden>
+  <div class="welcome"><div><span class="eyebrow">GESTIÓN DE COLABORACIONES · BOLIVIA</span><h1>La comunidad, en movimiento.</h1><p>Cada iniciativa tiene un lugar y un seguimiento.</p></div><div class="toolbar"><button id="reload" type="button">Actualizar ↻</button><button id="export" type="button">Exportar CSV</button></div></div>
+  <div class="stats">
+    <article><span>Nuevas</span><strong id="stat-new">—</strong><small>Pendientes de atención</small></article>
+    <article><span>En coordinación</span><strong id="stat-progress">—</strong><small>Contacto y seguimiento</small></article>
+    <article><span>Completadas</span><strong id="stat-done">—</strong><small>Acciones realizadas</small></article>
+    <article><span>Solicitudes recientes</span><strong id="stat-all">—</strong><small>Hasta 500 registros</small></article>
+  </div>
+  <div class="workspace">
+    <section class="inbox">
+      <div class="section-heading"><div><span class="eyebrow">BANDEJA DE ENTRADA</span><h2>Propuestas recibidas</h2></div><span id="visible-count" class="pill">0 resultados</span></div>
+      <div class="filters">
+        <label><span class="sr-only">Buscar solicitudes</span><input id="search" type="search" placeholder="Buscar nombre, ciudad o propuesta..."></label>
+        <label><span class="sr-only">Estado</span><select id="filter-status"><option value="">Todos los estados</option><option value="nueva">Nueva</option><option value="contactada">Contactada</option><option value="en_coordinacion">En coordinación</option><option value="completada">Completada</option><option value="archivada">Archivada</option></select></label>
+        <label><span class="sr-only">Tipo</span><select id="filter-type"><option value="">Todos los tipos</option><option value="materiales">Materiales</option><option value="tutorias">Tutorías</option><option value="talleres">Talleres</option><option value="alianzas">Alianzas</option><option value="otros">Otros</option></select></label>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Persona</th><th>Propuesta</th><th>Ciudad</th><th>Fecha</th><th>Estado</th></tr></thead><tbody id="records"></tbody></table></div>
+      <p id="empty" class="empty">No hay propuestas para mostrar.</p>
+      <p id="list-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+    <aside class="detail" id="detail">
+      <div id="detail-empty" class="detail-empty"><span class="large-orb" aria-hidden="true"></span><h2>Elige una propuesta</h2><p>Selecciona una solicitud para leerla, contactar a la persona y organizar los siguientes pasos.</p></div>
+      <div id="detail-body" hidden>
+        <div class="detail-head"><span class="eyebrow">SEGUIMIENTO INDIVIDUAL</span><span class="pill" id="detail-code"></span></div>
+        <h2 id="detail-name"></h2><p id="detail-type"></p>
+        <div class="detail-grid"><div><small>Ciudad</small><strong id="detail-city"></strong></div><div><small>Recibida</small><strong id="detail-date"></strong></div></div>
+        <div class="detail-contact"><a id="detail-mail" href="#" hidden>Escribir correo ↗</a><a id="detail-phone" href="#" hidden>Abrir WhatsApp ↗</a></div>
+        <h3>Propuesta</h3><p class="description" id="detail-description"></p>
+        <form id="detail-form">
+          <label>Estado de seguimiento<select id="detail-status"><option value="nueva">Nueva</option><option value="contactada">Contactada</option><option value="en_coordinacion">En coordinación</option><option value="completada">Completada</option><option value="archivada">Archivada</option></select></label>
+          <label>Notas internas<textarea id="detail-note" maxlength="3000" rows="5" placeholder="Ej.: contactar el jueves, coordinar recepción de libros..."></textarea></label>
+          <button type="submit" class="primary" id="save-detail">Guardar seguimiento</button>
+          <p class="status" id="detail-result" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </aside>
+  </div>
+  <p class="footnote">Panel de uso exclusivo del equipo autorizado. Los datos personales deben utilizarse únicamente para gestionar las propuestas y eliminarse cuando ya no sean necesarios. Las estadísticas muestran únicamente las solicitudes cargadas.</p>
+</section>
+</main>
+</body></html>

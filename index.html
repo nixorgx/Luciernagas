@@ -17,8 +17,11 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/experience.css" />
+  <link rel="stylesheet" href="css/gestion.css" />
   <script defer src="js/main.js"></script>
   <script defer src="js/experience.js"></script>
+  <script defer src="js/backend-config.js"></script>
+  <script defer src="js/solicitudes.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -149,20 +152,51 @@
     <section class="join section-pad" id="sumate" aria-labelledby="join-heading">
       <div class="join-orb join-orb-one" aria-hidden="true"></div><div class="join-orb join-orb-two" aria-hidden="true"></div>
       <div class="container join-grid">
-        <div class="join-copy" data-reveal><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Hagamos esto juntos</p><h2 id="join-heading">El mañana brilla<br><em>más contigo.</em></h2><p>Luciérnagas está dando sus primeros pasos. Si quieres ayudar, compartir conocimiento o apoyar la iniciativa, podemos comenzar por una conversación.</p></div>
-        <div class="join-panel" data-reveal data-delay="120">
-          <p class="panel-overline">TU PRIMER PASO</p>
-          <h3>¿Cómo te gustaría sumar tu luz?</h3>
-          <fieldset class="interest-options"><legend class="sr-only">Selecciona una manera de participar</legend><label><input type="radio" name="interest" value="donar libros o material escolar" checked><span>Donar materiales</span></label><label><input type="radio" name="interest" value="ofrecer tutorías o talleres gratuitos"><span>Ser voluntario/a</span></label><label><input type="radio" name="interest" value="proponer una alianza o colaboración"><span>Proponer una alianza</span></label></fieldset>
-          <button type="button" class="button button-gold button-full" id="prepare-message">Preparar mi mensaje <span aria-hidden="true">↗</span></button>
+        <div class="join-copy" data-reveal><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Hagamos esto juntos</p><h2 id="join-heading">El mañana brilla<br><em>más contigo.</em></h2><p>Luciérnagas está dando sus primeros pasos. Queremos organizar cada donación, tutoría y alianza con claridad y responder a quienes decidan colaborar.</p></div>
+        <div class="join-panel join-panel-intake" data-reveal data-delay="120">
+          <p class="panel-overline">INSCRIPCIONES Y PROPUESTAS</p>
+          <h3>Cuéntanos cómo quieres ayudar.</h3>
+          <p class="intake-intro">Cada libro, taller o propuesta cuenta. Completa estos datos y organizaremos el siguiente paso contigo.</p>
+          <form id="intake-form" class="intake-form" novalidate>
+            <fieldset class="intake-types">
+              <legend>Me interesa participar con…</legend>
+              <div class="intake-options">
+                <label><input type="radio" name="tipo" value="materiales" checked><span><b>Libros y materiales</b><small>Donar útiles o libros</small></span></label>
+                <label><input type="radio" name="tipo" value="tutorias"><span><b>Tutorías</b><small>Apoyo académico</small></span></label>
+                <label><input type="radio" name="tipo" value="talleres"><span><b>Talleres</b><small>Actividades y clases</small></span></label>
+                <label><input type="radio" name="tipo" value="alianzas"><span><b>Alianzas</b><small>Instituciones y grupos</small></span></label>
+                <label><input type="radio" name="tipo" value="otros"><span><b>Otra propuesta</b><small>Ideas para colaborar</small></span></label>
+              </div>
+            </fieldset>
+            <div class="intake-fields">
+              <label class="intake-field intake-wide" for="intake-name">Nombre completo <span aria-hidden="true">*</span>
+                <input id="intake-name" name="nombre" type="text" autocomplete="name" minlength="3" maxlength="90" placeholder="Tu nombre y apellido" required>
+              </label>
+              <label class="intake-field" for="intake-email">Correo electrónico
+                <input id="intake-email" name="correo" type="email" autocomplete="email" maxlength="254" placeholder="tu@correo.com">
+              </label>
+              <label class="intake-field" for="intake-phone">WhatsApp o teléfono
+                <input id="intake-phone" name="telefono" type="tel" autocomplete="tel" maxlength="25" placeholder="+591 ...">
+              </label>
+              <label class="intake-field intake-wide" for="intake-city">Ciudad o municipio
+                <input id="intake-city" name="ciudad" type="text" autocomplete="address-level2" maxlength="100" placeholder="Ej.: Cochabamba" required>
+              </label>
+              <label class="intake-field intake-wide" for="intake-details">¿Cómo te gustaría colaborar? <span aria-hidden="true">*</span>
+                <textarea id="intake-details" name="descripcion" rows="4" minlength="12" maxlength="1600" placeholder="Ej.: Tengo 20 libros de primaria en buen estado; puedo coordinarlos en Cochabamba." required></textarea>
+              </label>
+            </div>
+            <div class="intake-trap" aria-hidden="true"><label for="intake-website">Deja este campo vacío</label><input type="text" id="intake-website" name="sitio_web" tabindex="-1" autocomplete="off"></div>
+            <label class="intake-consent"><input type="checkbox" name="autorizacion" required><span>Autorizo a Luciérnagas a utilizar mis datos solo para responder y coordinar esta propuesta. Si soy menor de edad, cuento con la autorización de una persona responsable.</span></label>
+            <p class="intake-privacy">Indica un correo o un teléfono para poder responder. No incluyas datos personales de niñas o niños ni envíes dinero por este formulario.</p>
+            <button class="button button-gold button-full intake-submit" type="submit" id="intake-submit">Preparar propuesta <span aria-hidden="true">↗</span></button>
+            <p id="intake-status" class="intake-status" role="status" aria-live="polite">La recepción digital está en preparación. Por ahora podrás copiar tu propuesta; no se enviará automáticamente.</p>
+          </form>
           <button type="button" class="share-button" id="share-project">O comparte la iniciativa con alguien <span aria-hidden="true">↗</span></button>
-          <p class="form-note" id="join-feedback" role="status" aria-live="polite">No solicitamos pagos ni datos personales desde esta página.</p>
-          <div class="prepared-message" id="prepared-message" hidden><p>Mensaje listo para copiar y enviar por tu canal preferido:</p><textarea aria-label="Mensaje para compartir" id="message-text" readonly rows="3"></textarea><button type="button" class="copy-message" id="copy-message">Copiar mensaje <span aria-hidden="true">⧉</span></button></div>
         </div>
       </div>
     </section>
 
-    <section class="faq section-pad" id="preguntas" aria-labelledby="faq-heading"><div class="container faq-grid"><div class="faq-title" data-reveal><p class="eyebrow"><span class="eyebrow-line"></span> Resolvamos tus dudas</p><h2 id="faq-heading">Preguntas<br><em>con corazón.</em></h2><p>La transparencia también forma parte de nuestra manera de ayudar.</p></div><div class="faq-items" data-reveal data-delay="100"><details><summary>¿Qué es Luciérnagas? <span>+</span></summary><p>Es una iniciativa social en etapa de formación en Bolivia, enfocada en ampliar oportunidades educativas para niñas y niños mediante donaciones de materiales, tutorías y actividades gratuitas.</p></details><details><summary>¿Cómo puedo ayudar? <span>+</span></summary><p>Puedes comenzar por ofrecer libros o material escolar en buen estado, proponer tutorías o talleres, conectar aliados o compartir la iniciativa. Estamos organizando los canales de participación.</p></details><details><summary>¿Reciben donaciones de dinero? <span>+</span></summary><p>Por ahora, esta página no recibe pagos ni solicita transferencias. Comunicaremos cualquier mecanismo de aportes únicamente cuando exista un proceso formal, verificable y transparente.</p></details><details><summary>¿Ya tienen campañas o fechas confirmadas? <span>+</span></summary><p>Aún no anunciamos fechas ni puntos de recolección. Se publicarán cuando las actividades estén organizadas y confirmadas.</p></details></div></div></section>
+    <section class="faq section-pad" id="preguntas" aria-labelledby="faq-heading"><div class="container faq-grid"><div class="faq-title" data-reveal><p class="eyebrow"><span class="eyebrow-line"></span> Resolvamos tus dudas</p><h2 id="faq-heading">Preguntas<br><em>con corazón.</em></h2><p>La transparencia también forma parte de nuestra manera de ayudar.</p></div><div class="faq-items" data-reveal data-delay="100"><details><summary>¿Qué es Luciérnagas? <span>+</span></summary><p>Es una iniciativa social en etapa de formación en Bolivia, enfocada en ampliar oportunidades educativas para niñas y niños mediante donaciones de materiales, tutorías y actividades gratuitas.</p></details><details><summary>¿Cómo puedo ayudar? <span>+</span></summary><p>Puedes comenzar por ofrecer libros o material escolar en buen estado, proponer tutorías o talleres, conectar aliados o compartir la iniciativa. Estamos preparando nuestro sistema de solicitudes para coordinar cada propuesta.</p></details><details><summary>¿Reciben donaciones de dinero? <span>+</span></summary><p>Por ahora, esta página no recibe pagos ni solicita transferencias. Comunicaremos cualquier mecanismo de aportes únicamente cuando exista un proceso formal, verificable y transparente.</p></details><details><summary>¿Ya tienen campañas o fechas confirmadas? <span>+</span></summary><p>Aún no anunciamos fechas ni puntos de recolección. Se publicarán cuando las actividades estén organizadas y confirmadas.</p></details></div></div></section>
   </main>
 
   <div class="photo-credits container" id="creditos">
@@ -179,6 +213,6 @@
       <p>Licencias: <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a> y <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.</p>
     </details>
   </div>
-  <footer class="footer"><div class="container footer-main"><div class="footer-brand"><a href="#inicio" class="footer-logo"><img src="assets/isotipo.webp" width="65" height="58" alt="" /><span><strong>Luciérnagas</strong><small>Luz para su mañana</small></span></a><p>Creemos en el poder de compartir oportunidades para que más sueños encuentren su camino.</p></div><div class="footer-links"><div><h3>Explora</h3><a href="#nosotros">Nuestra esencia</a><a href="#que-hacemos">Qué hacemos</a><a href="#como-ayudar">Cómo ayudar</a></div><div><h3>Conecta</h3><a href="#sumate">Quiero sumarme</a><a href="#preguntas">Preguntas frecuentes</a><button type="button" id="footer-share">Compartir Luciérnagas ↗</button></div></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> Luciérnagas. Hecho con propósito en Bolivia.</span><span>Iniciativa social en formación · Fotografías de Bolivia con atribución</span><button type="button" id="ambient-motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="Pausar luciérnagas animadas">Pausar luciérnagas</button><a href="#inicio">Volver arriba ↑</a></div></footer>
+  <footer class="footer"><div class="container footer-main"><div class="footer-brand"><a href="#inicio" class="footer-logo"><img src="assets/isotipo.webp" width="65" height="58" alt="" /><span><strong>Luciérnagas</strong><small>Luz para su mañana</small></span></a><p>Creemos en el poder de compartir oportunidades para que más sueños encuentren su camino.</p></div><div class="footer-links"><div><h3>Explora</h3><a href="#nosotros">Nuestra esencia</a><a href="#que-hacemos">Qué hacemos</a><a href="#como-ayudar">Cómo ayudar</a></div><div><h3>Conecta</h3><a href="#sumate">Quiero sumarme</a><a href="#preguntas">Preguntas frecuentes</a><button type="button" id="footer-share">Compartir Luciérnagas ↗</button><a href="admin/" class="admin-entry">Acceso del equipo</a></div></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> Luciérnagas. Hecho con propósito en Bolivia.</span><span>Iniciativa social en formación · Fotografías de Bolivia con atribución</span><button type="button" id="ambient-motion-toggle" class="motion-toggle" aria-pressed="false" aria-label="Pausar luciérnagas animadas">Pausar luciérnagas</button><a href="#inicio">Volver arriba ↑</a></div></footer>
 </body>
 </html>
