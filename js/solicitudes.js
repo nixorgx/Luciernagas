@@ -66,7 +66,7 @@
 
   if(ready){
     button.firstChild.textContent='Enviar mi propuesta ';
-    announce('Tu propuesta se enviará al equipo de Luciérnagas y podrá gestionarse desde un panel privado.');
+    announce('Tu propuesta se enviará al equipo de Luciérnagas para su revisión.');
   } else {
     button.firstChild.textContent='Copiar mi propuesta ';
     announce('El sistema de recepción está en preparación. Este botón solo copiará tu propuesta; no se enviará automáticamente.');

@@ -31,8 +31,6 @@
 .intake-status[data-state="success"]{background:#e6f5e4;color:#236540;border-color:#8dbb9b}
 .intake-status[data-state="pending"]{background:#fcf3df;color:#7d6339}
 .intake-trap{position:absolute!important;left:-99999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
-.footer .admin-entry{opacity:.72;font-size:11px}
-.footer .admin-entry:hover{opacity:1}
 @media(max-width:600px){.intake-options{grid-template-columns:1fr 1fr}.intake-fields{grid-template-columns:1fr}.intake-field{grid-column:1/-1}.intake-options span{min-height:76px}.join-panel-intake{padding-inline:20px}}
 @media(max-width:380px){.intake-options{grid-template-columns:1fr}.intake-options label:last-child{grid-column:auto}}
 
