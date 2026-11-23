@@ -35,38 +35,20 @@ python -m http.server 5500
 
 Abre `http://localhost:5500`.
 
-## Publicar en GitHub Pages
+## Publicación en GitHub Pages
 
-El repositorio incluye el workflow `.github/workflows/deploy.yml` para publicar automáticamente cada cambio a `main`.
+La web se publica automáticamente con **GitHub Pages desde la rama `main` y su carpeta raíz**. El repositorio es [nixorgx/Luciernagas](https://github.com/nixorgx/Luciernagas) y el sitio es [nixorgx.github.io/Luciernagas/](https://nixorgx.github.io/Luciernagas/).
 
-1. Repositorio utilizado: `nixorgx/Luci-rnagas`.
-2. Sube todo el contenido de este proyecto conservando las carpetas `.github`, `assets`, `css` y `js`. Si usas Git desde la terminal, desde la carpeta del proyecto ejecuta:
+En **Settings → Pages → Build and deployment**, la opción configurada es **Deploy from a branch**, rama `main`, carpeta `/(root)`. Los cambios se publican cada vez que se actualiza `main`.
 
-   ```bash
-   git remote add origin https://github.com/nixorgx/Luci-rnagas.git
-   git push -u origin main
-   ```
+La página no gestiona todavía pagos, inscripciones ni datos personales. El botón «Preparar mi mensaje» solamente permite redactar y copiar una intención de colaboración.
 
-3. En el repositorio, entra a **Settings → Pages → Build and deployment → Source: GitHub Actions**. Esto permite que el workflow ya incluido despliegue el sitio.
-4. Revisa la ejecución de **Actions → Publicar Luciérnagas**. La dirección prevista es `https://nixorgx.github.io/Luci-rnagas/` una vez publicada.
-
-Si prefieres no usar GitHub Actions, en **Settings → Pages** selecciona **Deploy from a branch → main → /(root)** para publicar directamente los archivos estáticos.
-
-> La web no dispone todavía de un formulario de registro, canal oficial de contacto, pasarela de donaciones ni base de datos. No anuncia cifras, eventos ni métodos de pago que no estén verificados. El botón «Preparar mi mensaje» permite escribir y copiar un mensaje para los canales que se habiliten.
 
 ## Diseño y créditos
 
 **Logotipo:** creación original de Luciérnagas aportada por la persona organizadora. Colores de la marca: verde bosque, crema cálido y ámbar.
 
-**Fotografías ilustrativas:** imágenes de Unsplash mostradas mediante enlaces al CDN de Unsplash, no representan beneficiarios ni actividades reales de Luciérnagas.
-
-- [Estudiantes leyendo en un aula — Yustinus Tjiuwanda](https://unsplash.com/photos/students-reading-textbooks-in-classroom-BCBGahg0MH0)
-- [Niño en biblioteca — Arthur Tseng](https://unsplash.com/photos/a-young-child-reads-a-book-in-front-of-bookshelves-Wv4_uJ0zlTw)
-- [Niña leyendo — Stephen Andrews](https://unsplash.com/photos/child-reading-book-u0zTce7KNlY)
-- [Docente y estudiante — Vitaly Gariev](https://unsplash.com/photos/teacher-helping-young-student-with-math-problems-at-desk-wr2OzAO5fpc)
-- [Material escolar — Volodymyr Proskurovskyi](https://unsplash.com/photos/flat-lay-photo-of-school-supplies-ZlPeHjYoAdU)
-
-Las fotografías están disponibles bajo la [licencia de Unsplash](https://unsplash.com/license). Verifica las condiciones aplicables antes de redistribuir los recursos.
+**Fotografías:** fotografías documentales de Bolivia tomadas de Wikimedia Commons, sin relación institucional con Luciérnagas. La sección «Créditos de las fotografías» en la web conserva autorías, enlaces y licencias. Los recortes y la composición se adaptan por CSS a cada tamaño de pantalla.
 
 ## Próximas decisiones recomendadas
 
@@ -76,3 +58,11 @@ Antes de publicar una campaña real, define el correo o canal de contacto oficia
 ## Actualización visual — noviembre de 2026
 
 La barra superior y el menú acompañan el desplazamiento; la navegación resalta la sección visible. Se sustituyeron los caracteres decorativos en forma de asterisco por puntos luminosos animados, con opción de movimiento reducido. Las fotografías son reales y documentales de Bolivia, con créditos visibles al pie de la web y enlaces a sus fichas de licencia. No muestran actividades organizadas por Luciérnagas. Se conserva el modo de revisión con `?review=1`.
+
+
+## Arquitectura de navegación y fondo (versión 2026)
+
+- `css/experience.css` contiene la cabecera fija premium, estados de desplazamiento, navegación móvil y estilos de accesibilidad.
+- `js/experience.js` controla el progreso de lectura, la selección de sección y un motor de luciérnagas dibujado sobre Canvas 2D con varias profundidades, resplandores, estelas y trayectorias curvas. Adaptado conceptualmente del componente de estrellas de Tunari Fire Monitor.
+- El fondo reduce su carga en dispositivos modestos y detiene la animación al ocultarse la pestaña, cuando el sistema solicita menos movimiento o al utilizar el botón «Pausar luciérnagas».
+- `js/main.js` conserva las funciones originales y el modo de revisión visual `?review=1`.

@@ -119,3 +119,15 @@ body.menu-open { overflow: hidden }
   .ambient-layer { display:none }
   .top-shell .reading-track #reading-progress { will-change:auto }
 }
+
+
+/* Alineación con el resto del sitio y metadatos */
+.scroll-sentinel{height:0;scroll-margin-top:var(--site-top-height)}
+.hero-image-bubble,.sparkle-shape,.tiny-sun,.quote-sun,.stamp-star,.manifesto-mark,.handdrawn-asterisk,.join-flourish{display:none!important}
+.marquee-track i{display:inline-block;width:5px;height:5px;border-radius:50%;background:#ca9e64;font-size:0;opacity:.68}
+.program-icon:empty,.help-icon:empty{display:inline-block;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#fff9c9 0%,#f0bd6d 45%,#b77b35 90%);box-shadow:0 0 0 6px rgba(245,194,111,.1)}
+.photo-credits{position:relative;z-index:2;padding:26px 0 34px;color:#51675e}
+.photo-credits details{border-top:1px solid rgba(23,75,69,.13);padding:16px 0}
+.photo-credits summary{cursor:pointer;font-size:12px;font-weight:700;color:#315a4e}
+.photo-credits p{max-width:1000px;margin:12px 0;font-size:11px;line-height:1.75}
+.photo-credits a{color:#205a4c;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
