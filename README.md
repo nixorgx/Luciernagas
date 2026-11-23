@@ -70,10 +70,14 @@ La barra superior y el menú acompañan el desplazamiento; la navegación resalt
 - `js/main.js` conserva las funciones originales y el modo de revisión visual `?review=1`.
 
 
-## Sistema de gestión de colaboraciones (pendiente de conectar)
+## Sistema de gestión de colaboraciones (conectado a Supabase Free)
 
 La sección «Quiero sumarme» contiene un formulario para personas interesadas en donar materiales, dar tutorías, impartir talleres, crear alianzas u otras colaboraciones. El panel privado está en [`/admin/`](./admin/). Incluye búsqueda, filtros, estados, notas internas y exportación a CSV, con acceso restringido a personas autorizadas mediante Supabase Auth y Row Level Security (RLS).
 
-**Para activarlo** sigue [`supabase/README.md`](./supabase/README.md): crea un proyecto de Supabase exclusivo para Luciérnagas, ejecuta el esquema SQL, crea una cuenta de coordinación, autoriza su UUID y configura la URL más la clave **publicable** en `js/backend-config.js`. Nunca añadas claves secretas al repositorio. Hasta completar ese proceso, el sitio solo permite **copiar** propuestas, no enviarlas.
+**Sistema conectado:** la base de datos propia de Luciérnagas está funcionando en Supabase Free, protegida con Row Level Security. El formulario público envía propuestas reales, mientras que el panel privado permite leer y clasificar solicitudes a los coordinadores autorizados.
+
+**Para crear tu acceso**, visita [Crear cuenta de coordinación](https://nixorgx.github.io/Luciernagas/admin/?crear-acceso=1), usa el correo titular de la organización y configura una contraseña personal o genera una segura en tu navegador. Después confirma tu correo y solicita habilitar ese usuario como coordinador. El registro de una cuenta no concede permisos administrativos automáticamente.
+
+El formulario de colaboración tiene tres pasos: tipo de ayuda, información de contacto y descripción de la propuesta. Las contraseñas no se guardan en el repositorio. Consulta [las instrucciones de Supabase](./supabase/README.md) para la gestión del sistema.
 
 Los datos personales requieren un responsable, una política de privacidad y un protocolo de conservación/eliminación antes de aceptar solicitudes reales. Las reglas de RLS protegen lectura y gestión, pero para operaciones a escala se necesita protección anti-spam adicional en servidor.

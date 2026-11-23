@@ -154,43 +154,65 @@
       <div class="container join-grid">
         <div class="join-copy" data-reveal><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Hagamos esto juntos</p><h2 id="join-heading">El mañana brilla<br><em>más contigo.</em></h2><p>Luciérnagas está dando sus primeros pasos. Queremos organizar cada donación, tutoría y alianza con claridad y responder a quienes decidan colaborar.</p></div>
         <div class="join-panel join-panel-intake" data-reveal data-delay="120">
-          <p class="panel-overline">INSCRIPCIONES Y PROPUESTAS</p>
-          <h3>Cuéntanos cómo quieres ayudar.</h3>
-          <p class="intake-intro">Cada libro, taller o propuesta cuenta. Completa estos datos y organizaremos el siguiente paso contigo.</p>
+          <div class="intake-head">
+            <span class="intake-overline"><span aria-hidden="true" class="intake-glow"></span> PROPUESTAS DE COLABORACIÓN</span>
+            <h3>Una pequeña acción.<br><em>Un gran comienzo.</em></h3>
+            <p>Registra tu idea en tres pasos. El equipo podrá revisarla y coordinar contigo.</p>
+          </div>
           <form id="intake-form" class="intake-form" novalidate>
-            <fieldset class="intake-types">
-              <legend>Me interesa participar con…</legend>
-              <div class="intake-options">
-                <label><input type="radio" name="tipo" value="materiales" checked><span><b>Libros y materiales</b><small>Donar útiles o libros</small></span></label>
-                <label><input type="radio" name="tipo" value="tutorias"><span><b>Tutorías</b><small>Apoyo académico</small></span></label>
-                <label><input type="radio" name="tipo" value="talleres"><span><b>Talleres</b><small>Actividades y clases</small></span></label>
-                <label><input type="radio" name="tipo" value="alianzas"><span><b>Alianzas</b><small>Instituciones y grupos</small></span></label>
-                <label><input type="radio" name="tipo" value="otros"><span><b>Otra propuesta</b><small>Ideas para colaborar</small></span></label>
-              </div>
-            </fieldset>
-            <div class="intake-fields">
-              <label class="intake-field intake-wide" for="intake-name">Nombre completo <span aria-hidden="true">*</span>
-                <input id="intake-name" name="nombre" type="text" autocomplete="name" minlength="3" maxlength="90" placeholder="Tu nombre y apellido" required>
-              </label>
-              <label class="intake-field" for="intake-email">Correo electrónico
-                <input id="intake-email" name="correo" type="email" autocomplete="email" maxlength="254" placeholder="tu@correo.com">
-              </label>
-              <label class="intake-field" for="intake-phone">WhatsApp o teléfono
-                <input id="intake-phone" name="telefono" type="tel" autocomplete="tel" maxlength="25" placeholder="+591 ...">
-              </label>
-              <label class="intake-field intake-wide" for="intake-city">Ciudad o municipio
-                <input id="intake-city" name="ciudad" type="text" autocomplete="address-level2" maxlength="100" placeholder="Ej.: Cochabamba" required>
-              </label>
-              <label class="intake-field intake-wide" for="intake-details">¿Cómo te gustaría colaborar? <span aria-hidden="true">*</span>
-                <textarea id="intake-details" name="descripcion" rows="4" minlength="12" maxlength="1600" placeholder="Ej.: Tengo 20 libros de primaria en buen estado; puedo coordinarlos en Cochabamba." required></textarea>
-              </label>
+            <div class="intake-progress" role="list" aria-label="Avance de la propuesta">
+              <span role="listitem" class="intake-progress-item is-current" data-step-marker="1" aria-current="step"><b>01</b><small>Tu aporte</small></span>
+              <span role="listitem" class="intake-progress-item" data-step-marker="2"><b>02</b><small>Contacto</small></span>
+              <span role="listitem" class="intake-progress-item" data-step-marker="3"><b>03</b><small>Detalles</small></span>
             </div>
-            <div class="intake-trap" aria-hidden="true"><label for="intake-website">Deja este campo vacío</label><input type="text" id="intake-website" name="sitio_web" tabindex="-1" autocomplete="off"></div>
-            <label class="intake-consent"><input type="checkbox" name="autorizacion" required><span>Autorizo a Luciérnagas a utilizar mis datos solo para responder y coordinar esta propuesta. Si soy menor de edad, cuento con la autorización de una persona responsable.</span></label>
-            <p class="intake-privacy">Indica un correo o un teléfono para poder responder. No incluyas datos personales de niñas o niños ni envíes dinero por este formulario.</p>
-            <button class="button button-gold button-full intake-submit" type="submit" id="intake-submit">Preparar propuesta <span aria-hidden="true">↗</span></button>
-            <p id="intake-status" class="intake-status" role="status" aria-live="polite">La recepción digital está en preparación. Por ahora podrás copiar tu propuesta; no se enviará automáticamente.</p>
+            <section class="intake-step" data-step="1" aria-labelledby="step-1-title">
+              <div class="intake-step-title"><span>01 / 03</span><h4 id="step-1-title" tabindex="-1">¿Cómo quieres encender una oportunidad?</h4></div>
+              <fieldset class="intake-types"><legend class="sr-only">Tipo de colaboración</legend>
+                <div class="intake-options">
+                  <label><input type="radio" name="tipo" value="materiales" checked><span><b>Libros y materiales</b><small>Libros, cuadernos y útiles</small></span></label>
+                  <label><input type="radio" name="tipo" value="tutorias"><span><b>Dar tutorías</b><small>Acompañamiento escolar</small></span></label>
+                  <label><input type="radio" name="tipo" value="talleres"><span><b>Ofrecer talleres</b><small>Arte, ciencia y habilidades</small></span></label>
+                  <label><input type="radio" name="tipo" value="alianzas"><span><b>Crear una alianza</b><small>Organizaciones y empresas</small></span></label>
+                  <label><input type="radio" name="tipo" value="otros"><span><b>Otra idea</b><small>Propuestas para colaborar</small></span></label>
+                </div>
+              </fieldset>
+              <p class="intake-helper" id="intake-type-help">Puedes ofrecernos libros o útiles en buen estado. Nos pondremos en contacto para coordinar.</p>
+              <div class="intake-actions"><button class="intake-next button button-gold" id="intake-next-1" type="button">Continuar <span aria-hidden="true">→</span></button></div>
+            </section>
+            <section class="intake-step" data-step="2" aria-labelledby="step-2-title" hidden>
+              <div class="intake-step-title"><span>02 / 03</span><h4 id="step-2-title" tabindex="-1">¿Con quién podemos coordinar?</h4><p>Solo solicitamos la información necesaria para responderte.</p></div>
+              <div class="intake-fields">
+                <label class="intake-field intake-wide" for="intake-name">Nombre completo <span aria-hidden="true">*</span>
+                  <input id="intake-name" name="nombre" type="text" autocomplete="name" minlength="3" maxlength="90" placeholder="Tu nombre y apellido" required>
+                </label>
+                <label class="intake-field" for="intake-email">Correo electrónico
+                  <input id="intake-email" name="correo" type="email" autocomplete="email" maxlength="254" placeholder="tu@correo.com">
+                </label>
+                <label class="intake-field" for="intake-phone">WhatsApp o teléfono
+                  <input id="intake-phone" name="telefono" type="tel" autocomplete="tel" maxlength="25" placeholder="+591 ...">
+                </label>
+                <label class="intake-field intake-wide" for="intake-city">Ciudad o municipio <span aria-hidden="true">*</span>
+                  <input id="intake-city" name="ciudad" type="text" autocomplete="address-level2" maxlength="100" placeholder="Ej.: Cochabamba" required>
+                </label>
+              </div>
+              <p class="intake-helper">Necesitamos al menos un medio de contacto: correo o teléfono.</p>
+              <div class="intake-actions"><button class="intake-back" type="button" data-back-step="1">← Volver</button><button class="intake-next button button-gold" id="intake-next-2" type="button">Continuar <span aria-hidden="true">→</span></button></div>
+            </section>
+            <section class="intake-step" data-step="3" aria-labelledby="step-3-title" hidden>
+              <div class="intake-step-title"><span>03 / 03</span><h4 id="step-3-title" tabindex="-1">Cuéntanos un poco más de tu propuesta.</h4></div>
+              <div class="intake-selection-summary" id="intake-summary" aria-live="polite">Libros y materiales · Bolivia</div>
+              <label class="intake-field intake-wide" for="intake-details">Tu propuesta <span aria-hidden="true">*</span>
+                <textarea id="intake-details" name="descripcion" rows="5" minlength="12" maxlength="1600" placeholder="¿Qué materiales te gustaría donar y en qué cantidad?" required></textarea>
+              </label>
+              <div class="intake-length"><span>Describe lo que ofreces y cuándo podríamos coordinar.</span><span id="intake-count">0 / 1600</span></div>
+              <div class="intake-trap" aria-hidden="true"><label for="intake-website">Deja este campo vacío</label><input type="text" id="intake-website" name="sitio_web" tabindex="-1" autocomplete="off"></div>
+              <label class="intake-consent"><input type="checkbox" name="autorizacion" required><span>Autorizo a Luciérnagas a usar mis datos únicamente para responder y coordinar mi propuesta. Si soy menor de edad, cuento con la autorización de una persona responsable.</span></label>
+              <p class="intake-privacy">No incluyas información de niñas o niños ni datos sensibles. No solicitamos transferencias ni pagos.</p>
+              <div class="intake-actions"><button class="intake-back" type="button" data-back-step="2">← Volver</button><button class="button button-gold intake-submit" type="submit" id="intake-submit">Enviar mi propuesta <span aria-hidden="true">↗</span></button></div>
+            </section>
+            <p id="intake-status" class="intake-status" role="status" aria-live="polite">Tu propuesta se registra de manera segura para que podamos responderte.</p>
           </form>
+          <div class="intake-footer"><span class="intake-footer-glow" aria-hidden="true"></span><span>Un gesto puede abrir nuevos caminos.</span></div>
           <button type="button" class="share-button" id="share-project">O comparte la iniciativa con alguien <span aria-hidden="true">↗</span></button>
         </div>
       </div>

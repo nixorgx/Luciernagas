@@ -15,17 +15,24 @@ Capturar propuestas de donación de libros y útiles, tutorías gratuitas, talle
 - \`admin/admin.css\`: diseño del panel.
 - \`supabase/schema.sql\`: tablas, restricciones, permisos y políticas RLS.
 
-## Estado de activación (23 de noviembre de 2026)
+## Estado real del sistema (noviembre de 2026)
 
-1. Crea o selecciona **un proyecto de Supabase dedicado a Luciérnagas**. No uses la base de datos de Tunari Fire Monitor por defecto.
-2. Abre **SQL Editor** del proyecto y ejecuta \`supabase/schema.sql\`. Revisa la consulta antes de ejecutarla si el proyecto ya contiene objetos con los mismos nombres.
-3. En **Authentication → Users**, crea una cuenta de equipo con correo verificado y contraseña segura.
-4. Copia el UUID de esa cuenta y ejecuta el \`INSERT\` comentado al final del archivo SQL para autorizarla en \`private.coordinadores\`.
-5. Obtén la **Project URL** y la **publishable key** en Supabase. Coloca esos dos valores en \`js/backend-config.js\`. La clave publicable es segura para el navegador solo porque existen reglas de base de datos adecuadas; nunca escribas \`service_role\` ni una *secret key* en el repositorio.
-6. Publica la actualización de GitHub Pages y abre \`/admin/\` con la cuenta autorizada.
-7. Prueba con una solicitud ficticia y comprueba en el panel que llegó, y que una sesión no autorizada no puede consultar propuestas ni notas.
+- Proyecto exclusivo de Luciérnagas en el plan Free de Supabase, región São Paulo, separado de Tunari Fire Monitor.
+- Base de datos y políticas RLS activadas. Prueba de inserción anónima realizada dentro de una transacción; la prueba no conservó datos.
+- Formulario público conectado con clave publicable. Nunca se incluyen claves privadas en la web.
+- El acceso a las propuestas depende del usuario autenticado y de los permisos de coordinación.
 
-**El formulario público ya se ha conectado a Supabase.** El acceso al panel sigue pendiente de habilitar una cuenta administrativa. No se han enviado propuestas reales.
+### Crear el primer acceso administrativo
+
+1. Abre https://nixorgx.github.io/Luciernagas/admin/?crear-acceso=1.
+2. Registra el correo titular de la organización de Supabase. Pulsa «Generar contraseña segura», guarda la contraseña en tu gestor personal y crea la cuenta.
+3. Confirma el email recibido de Supabase. Si el enlace de confirmación conduce a otro sitio, vuelve manualmente a la web administrativa.
+4. Comunica a ChatGPT «Ya registré y confirmé mi cuenta administrativa». Se localizará el usuario en Supabase y se autorizará su UUID en la tabla privada coordinadores.
+5. Abre https://nixorgx.github.io/Luciernagas/admin/ e inicia sesión.
+
+**Importante:** crear la cuenta no permite leer solicitudes. La autorización administrativa se aplica por separado, después de verificar el correo. Nunca compartas la contraseña en un chat ni en GitHub.
+
+El servicio gratuito de emails de Supabase tiene límites y normalmente envía mensajes de autenticación únicamente a correos autorizados de la organización. No debe tratarse como servicio masivo de notificaciones.
 
 ## Estados de seguimiento
 
@@ -34,7 +41,7 @@ Capturar propuestas de donación de libros y útiles, tutorías gratuitas, talle
 ## Seguridad y operación
 
 - PostgreSQL con RLS, acceso de lectura solo a usuarios autorizados y escritura pública limitada a nuevos formularios.
-- No abrir el registro de usuarios del equipo a desconocidos; las cuentas se crean y autorizan de forma manual.
+- El registro de usuarios está disponible desde la página de administración, pero no concede privilegios. Las cuentas de coordinación se autorizan separadamente después de revisar el correo.
 - El panel está bajo \`/admin/\`, pero la protección real es el servidor, no la URL.
 - El CSV contiene datos personales; guárdalo de forma segura y elimínalo cuando no sea necesario.
 - Deben existir una política de privacidad y un responsable del tratamiento antes de recibir datos reales, especialmente en un proyecto dedicado a niñas y niños.
@@ -44,7 +51,12 @@ Capturar propuestas de donación de libros y útiles, tutorías gratuitas, talle
 
 ## Pruebas funcionales
 
-- Con el archivo de configuración vacío, el formulario solo copia, sin afirmar que se recibió la propuesta.
+- Si se elimina la configuración del backend, el formulario no afirma haber enviado la propuesta. En este despliegue está conectado a Supabase.
 - Cuando está configurado, el formulario solicita datos mínimos y confirma éxito solo cuando Supabase devuelve una respuesta exitosa.
 - Sin sesión autorizada, no es posible listar propuestas ni editar sus estados.
 - Con sesión autorizada, la bandeja muestra un máximo de 500 propuestas recientes, admite búsqueda, clasificación y exportación a CSV.
+
+
+## Experiencia actualizada
+
+La participación pública se organiza en tres pasos (modalidad, contacto y propuesta). El panel administrativo tiene nueva identidad visual, acceso y registro de cuenta, generador de claves locales mediante Web Crypto, filtros, estadísticas, notas de seguimiento y exportación CSV.

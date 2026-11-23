@@ -135,7 +135,7 @@ async function onLogin(event){
     $('login-password').value='';
     await startDashboard(data.user);
   }catch(error){
-    announce('login-status',error.message==='not-coordinator'?'La cuenta no tiene permisos de coordinación.':'No se pudo iniciar sesión. Comprueba tus credenciales y los permisos.',true);
+    announce('login-status',error.message==='not-coordinator'?'La cuenta está creada, pero todavía no tiene permiso de coordinación. Solicita su activación después de verificar el correo.':'No se pudo iniciar sesión. Comprueba tus credenciales y los permisos.',true);
   }finally{button.disabled=false;}
 }
 async function startDashboard(user){
@@ -148,7 +148,7 @@ async function bootstrap(){
   try{
     const {data,error}=await supabase.auth.getUser();
     if(!error&&data.user&&await isCoordinator()){await startDashboard(data.user);}
-    else if(data.user){await supabase.auth.signOut();}
+    else if(data.user){await supabase.auth.signOut();announce('login-status','La cuenta está pendiente de autorización. Verifica el correo y solicita la activación.');}
   }catch(_){show('login-view');}
 }
 $('login-form').addEventListener('submit',onLogin);
@@ -158,3 +158,116 @@ $('export').addEventListener('click',exportCsv);
 $('detail-form').addEventListener('submit',save);
 for(const id of ['search','filter-status','filter-type'])$(id).addEventListener(id==='search'?'input':'change',render);
 bootstrap();
+
+
+/* Primer acceso: las contraseñas se crean solamente en el navegador y Supabase Auth.
+ * Registrarse NO otorga permiso sobre las propuestas. Se necesita aprobación
+ * explícita de un usuario de coordinación en la base de datos.
+ */
+(() => {
+  'use strict';
+  const login=$('login-form');
+  const signup=$('register-form');
+  const tabLogin=$('auth-tab-login');
+  const tabRegister=$('auth-tab-register');
+  if(!login||!signup||!tabLogin||!tabRegister)return;
+
+  function switchTo(mode) {
+    const register=mode==='register';
+    login.hidden=register;signup.hidden=!register;
+    tabLogin.classList.toggle('is-active',!register);
+    tabRegister.classList.toggle('is-active',register);
+    tabLogin.setAttribute('aria-pressed',String(!register));
+    tabRegister.setAttribute('aria-pressed',String(register));
+    $('auth-heading').textContent=register?'Creemos tu acceso.':'Bienvenido de nuevo.';
+    $('auth-subtitle').textContent=register?
+      'Registra tu correo personal de coordinación y crea una contraseña segura. Solo el equipo autorizado podrá entrar.' :
+      'Entra con la cuenta del equipo autorizada para administrar las propuestas.';
+  }
+  tabLogin.addEventListener('click',()=>switchTo('login'));
+  tabRegister.addEventListener('click',()=>switchTo('register'));
+  if(new URLSearchParams(location.search).has('crear-acceso'))switchTo('register');
+
+  function secureNumber(upper){
+    if(!globalThis.crypto?.getRandomValues)throw new Error('crypto_unavailable');
+    const n=new Uint32Array(1);
+    const limit=Math.floor(4294967296/upper)*upper;
+    do {crypto.getRandomValues(n);} while(n[0]>=limit);
+    return n[0]%upper;
+  }
+  function securePassword(){
+    const sets=['ABCDEFGHJKLMNPQRSTUVWXYZ','abcdefghijkmnopqrstuvwxyz','23456789','!@#%*-_'];
+    const all=sets.join('');
+    const chars=sets.map(s=>s[secureNumber(s.length)]);
+    while(chars.length<24)chars.push(all[secureNumber(all.length)]);
+    for(let i=chars.length-1;i>0;i--){
+      const j=secureNumber(i+1);
+      [chars[i],chars[j]]=[chars[j],chars[i]];
+    }
+    return chars.join('');
+  }
+
+  $('generate-pass').addEventListener('click',()=>{
+    try{
+      const value=securePassword();
+      $('register-password').value=value;
+      $('register-confirm').value=value;
+      $('register-password').type='text';
+      $('register-confirm').type='text';
+      $('show-pass').textContent='Ocultar contraseña';
+      announce('register-status','Contraseña segura generada en este dispositivo. Guárdala antes de crear tu cuenta. No la compartas por chat.');
+      $('register-password').focus();
+      $('register-password').select();
+    }catch(_){
+      announce('register-status','Tu navegador no permite generar claves seguras. Escribe una contraseña personal de al menos 12 caracteres.',true);
+    }
+  });
+
+  $('show-pass').addEventListener('click',()=>{
+    const show=$('register-password').type==='password';
+    $('register-password').type=show?'text':'password';
+    $('register-confirm').type=show?'text':'password';
+    $('show-pass').textContent=show?'Ocultar contraseña':'Mostrar contraseña';
+  });
+
+  signup.addEventListener('submit',async(event)=>{
+    event.preventDefault();
+    if(!supabase)return announce('register-status','La conexión a Supabase no está disponible.',true);
+    const email=$('register-email').value.trim().toLowerCase();
+    const password=$('register-password').value;
+    const confirm=$('register-confirm').value;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return announce('register-status','Introduce una dirección de correo válida.',true);
+    if(password.length<12||!/[a-z]/.test(password)||!/[A-Z]/.test(password)||!/\d/.test(password))
+      return announce('register-status','Utiliza 12 caracteres o más, con mayúsculas, minúsculas y al menos un número.',true);
+    if(password!==confirm)return announce('register-status','Las dos contraseñas no coinciden.',true);
+    const button=$('register-button');
+    button.disabled=true;
+    announce('register-status','Registrando cuenta con Supabase Auth...');
+    try{
+      const {data,error}=await supabase.auth.signUp({
+        email,password,options:{emailRedirectTo:location.origin+location.pathname}
+      });
+      if(error)throw error;
+      // Requerimos aprobación explícita aunque Auth permitiera una sesión inmediata.
+      if(data.session)await supabase.auth.signOut();
+      $('register-password').value='';
+      $('register-confirm').value='';
+      $('register-password').type='password';
+      $('register-confirm').type='password';
+      $('show-pass').textContent='Mostrar contraseña';
+      if(data.user){
+        announce('register-status','Cuenta solicitada. Revisa tu correo (y spam) para confirmar la dirección. Luego avisa al equipo de Luciérnagas para autorizar el acceso al panel. Al volver, utiliza «Iniciar sesión».');
+      }else{
+        announce('register-status','Si el correo puede registrarse, recibirás indicaciones de confirmación. Revisa tu bandeja de entrada antes de iniciar sesión.');
+      }
+    }catch(error){
+      const msg=(error?.message||'').toLowerCase();
+      const detail=msg.includes('rate')||msg.includes('limit')?'Se alcanzó el límite temporal de correos. Inténtalo más adelante.':
+        msg.includes('email address not authorized')||msg.includes('email_address_not_authorized')?
+        'El servicio gratuito de correo solo permite cuentas autorizadas de la organización. Usa su correo titular.':
+        msg.includes('already registered')?'Ese correo ya está registrado. Selecciona «Iniciar sesión».':
+        'No se pudo registrar la cuenta. Comprueba el correo, los datos y vuelve a intentarlo.';
+      announce('register-status',detail,true);
+    }finally{button.disabled=false;}
+  });
+})();

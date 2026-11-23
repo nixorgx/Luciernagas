@@ -133,3 +133,96 @@
     }finally{busy=false;button.disabled=false;button.firstChild.textContent=oldLabel;}
   });
 })();
+
+/* Recorrido accesible en tres pasos. Mantiene los datos hasta el envío confirmado. */
+(() => {
+  'use strict';
+  const form=document.getElementById('intake-form');
+  if(!form)return;
+  const steps=[...form.querySelectorAll('.intake-step[data-step]')];
+  const markers=[...form.querySelectorAll('.intake-progress-item')];
+  const status=document.getElementById('intake-status');
+  const description=document.getElementById('intake-details');
+  const counter=document.getElementById('intake-count');
+  const helper=document.getElementById('intake-type-help');
+  const summary=document.getElementById('intake-summary');
+  const presets={
+    materiales:{label:'Libros y materiales',hint:'Puedes ofrecernos libros o útiles en buen estado. Nos pondremos en contacto para coordinar.',placeholder:'Ej.: Tengo 15 libros infantiles y 10 cuadernos nuevos disponibles en Cochabamba. ¿Cuándo podemos entregarlos?'},
+    tutorias:{label:'Tutorías gratuitas',hint:'Cuéntanos qué materia puedes enseñar y qué horarios tienes disponibles.',placeholder:'Ej.: Puedo enseñar matemáticas a estudiantes de primaria los sábados, de forma presencial o virtual.'},
+    talleres:{label:'Talleres y clases',hint:'Puedes proponer actividades gratuitas de arte, ciencia, programación, música u otras habilidades.',placeholder:'Ej.: Puedo impartir un taller de lectura creativa para 12 estudiantes, una tarde al mes.'},
+    alianzas:{label:'Alianza o colaboración',hint:'Cuéntanos qué puede aportar tu organización o cómo podemos trabajar juntos.',placeholder:'Ej.: Somos una biblioteca y nos gustaría organizar una campaña de recolección de libros.'},
+    otros:{label:'Otra propuesta',hint:'También puedes compartir ideas que no estén en las categorías anteriores.',placeholder:'Ej.: Quiero apoyar con transporte voluntario para entregar material escolar en comunidades.'}
+  };
+  let stage=1;
+
+  const announce=(message)=>{
+    status.textContent=message;
+    status.dataset.state='error';
+  };
+  const getType=()=>form.querySelector('input[name="tipo"]:checked')?.value||'materiales';
+  function updatePreset(){
+    const current=presets[getType()];
+    helper.textContent=current.hint;
+    description.placeholder=current.placeholder;
+    const place=document.getElementById('intake-city').value.trim();
+    summary.textContent=current.label+(place?' · '+place:' · Bolivia');
+  }
+  function changeStage(n,focus=true){
+    stage=Math.min(3,Math.max(1,n));
+    for(const step of steps)step.hidden=Number(step.dataset.step)!==stage;
+    for(const marker of markers){
+      const number=Number(marker.dataset.stepMarker);
+      marker.classList.toggle('is-current',number===stage);
+      marker.classList.toggle('is-completed',number<stage);
+      if(number===stage)marker.setAttribute('aria-current','step');
+      else marker.removeAttribute('aria-current');
+    }
+    if(stage===3)updatePreset();
+    if(focus){
+      const title=form.querySelector('.intake-step[data-step="'+stage+'"] h4');
+      title?.focus({preventScroll:true});
+      title?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+    }
+  }
+  function validContact(){
+    const name=document.getElementById('intake-name');
+    const email=document.getElementById('intake-email');
+    const phone=document.getElementById('intake-phone');
+    const city=document.getElementById('intake-city');
+    if(name.value.trim().length<3){announce('Escribe tu nombre completo para continuar.');name.focus();return false;}
+    if(!email.value.trim()&&!phone.value.trim()){announce('Añade un correo o un número de contacto.');email.focus();return false;}
+    if(email.value.trim()&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){announce('El correo electrónico no tiene un formato válido.');email.focus();return false;}
+    if(phone.value.trim()&&!/^[+()\d\s.-]{7,25}$/.test(phone.value.trim())){announce('Revisa el teléfono o WhatsApp.');phone.focus();return false;}
+    if(!city.value.trim()){announce('Indica tu ciudad o municipio.');city.focus();return false;}
+    return true;
+  }
+  document.getElementById('intake-next-1')?.addEventListener('click',()=>changeStage(2));
+  document.getElementById('intake-next-2')?.addEventListener('click',()=>{
+    if(validContact())changeStage(3);
+  });
+  form.querySelectorAll('[data-back-step]').forEach(button=>{
+    button.addEventListener('click',()=>changeStage(Number(button.dataset.backStep)));
+  });
+  form.querySelectorAll('input[name="tipo"]').forEach(radio=>{
+    radio.addEventListener('change',updatePreset);
+  });
+  document.getElementById('intake-city')?.addEventListener('input',updatePreset);
+  description.addEventListener('input',()=>{
+    counter.textContent=description.value.length+' / 1600';
+    counter.dataset.limit=String(description.value.length>1500);
+  });
+  form.addEventListener('reset',()=>{
+    queueMicrotask(()=>{
+      changeStage(1,false);
+      updatePreset();
+      counter.textContent='0 / 1600';
+    });
+  });
+  document.querySelectorAll('a[href="#sumate"]').forEach(a=>a.addEventListener('click',()=>{
+    const selected=form.querySelector('input[name="tipo"]:checked');
+    if(selected)selected.dispatchEvent(new Event('change',{bubbles:true}));
+    changeStage(1,false);
+  }));
+  updatePreset();
+  changeStage(1,false);
+})();

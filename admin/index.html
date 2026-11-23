@@ -25,28 +25,62 @@
   <p>Por seguridad, no coloques contraseñas ni claves privadas en archivos del sitio.</p>
   <a class="primary-link" target="_blank" rel="noopener noreferrer" href="https://supabase.com/dashboard">Abrir Supabase</a>
 </section>
-<section class="gate" id="login-view" hidden>
-  <span class="eyebrow">ÁREA PRIVADA</span><h1>Organicemos cada oportunidad.</h1>
-  <p>Entra con una cuenta de coordinación autorizada. Las solicitudes no son públicas.</p>
-  <form id="login-form" class="login-form">
-    <label>Correo electrónico<input type="email" id="login-email" required autocomplete="username" placeholder="tu@correo.com"></label>
-    <label>Contraseña<input type="password" id="login-password" required autocomplete="current-password" placeholder="Contraseña"></label>
-    <button type="submit" class="primary" id="login-button">Entrar al panel</button>
-    <p class="status" id="login-status" role="status" aria-live="polite"></p>
-  </form>
-  <a class="back" href="../">Volver a la página pública</a>
+<section class="auth-shell" id="login-view" hidden>
+  <div class="auth-story">
+    <a class="auth-back" href="../">← Regresar a Luciérnagas</a>
+    <div class="auth-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+    <span class="eyebrow">LUZ PARA SU MAÑANA</span>
+    <h1>Detrás de cada gesto, <em>hay una oportunidad.</em></h1>
+    <p>Un espacio para organizar colaboraciones, acompañar voluntarios y dar seguimiento a cada propuesta con cuidado y transparencia.</p>
+    <div class="auth-story-footer"><span class="auth-light" aria-hidden="true"></span> Una comunidad que ilumina desde Bolivia.</div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-topline"><span class="eyebrow">ACCESO DE COORDINACIÓN</span><span class="auth-locked">ÁREA PROTEGIDA</span></div>
+    <h2 id="auth-heading">Bienvenido de nuevo.</h2>
+    <p class="auth-subtitle" id="auth-subtitle">Entra con la cuenta del equipo autorizada para administrar las propuestas.</p>
+    <div class="auth-switch" role="group" aria-label="Acceso o registro">
+      <button type="button" id="auth-tab-login" class="is-active" aria-pressed="true">Iniciar sesión</button>
+      <button type="button" id="auth-tab-register" aria-pressed="false">Crear acceso</button>
+    </div>
+    <form id="login-form" class="login-form" autocomplete="on">
+      <label>Correo electrónico<input type="email" id="login-email" required autocomplete="username" placeholder="tu@correo.com"></label>
+      <label>Contraseña<input type="password" id="login-password" required autocomplete="current-password" placeholder="Tu contraseña"></label>
+      <p class="auth-help">Si aún no tienes cuenta, selecciona «Crear acceso» y define tu contraseña de forma privada.</p>
+      <button type="submit" class="primary auth-primary" id="login-button">Entrar al panel <span aria-hidden="true">↗</span></button>
+      <p class="status" id="login-status" role="status" aria-live="polite"></p>
+    </form>
+    <form id="register-form" class="login-form" autocomplete="on" hidden>
+      <div class="auth-instructions">Usa el <strong>correo titular de tu organización de Supabase</strong>. Después de verificar tu correo, necesitaremos autorizar tu cuenta como coordinadora. Crear una cuenta no permite consultar ni gestionar solicitudes.</div>
+      <label>Correo de coordinación<input type="email" id="register-email" required autocomplete="email" maxlength="254" placeholder="El correo autorizado"></label>
+      <label>Contraseña segura
+        <input type="password" id="register-password" required autocomplete="new-password" minlength="12" maxlength="100" placeholder="Mínimo 12 caracteres">
+      </label>
+      <div class="auth-inline auth-password-tools">
+        <button class="auth-text-button" type="button" id="generate-pass">Generar contraseña segura</button>
+        <button class="auth-text-button" type="button" id="show-pass">Mostrar contraseña</button>
+      </div>
+      <label>Confirmar contraseña<input type="password" id="register-confirm" required autocomplete="new-password" minlength="12" maxlength="100" placeholder="Repite la contraseña"></label>
+      <div class="auth-instructions">Guarda la contraseña en un administrador de contraseñas. Si utilizas el generador, la clave se crea en tu navegador; nunca se guarda en GitHub ni se envía a ChatGPT.</div>
+      <button type="submit" class="primary auth-primary" id="register-button">Crear mi cuenta <span aria-hidden="true">↗</span></button>
+      <p class="status" id="register-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="auth-bottom"><span class="auth-bottom-dot" aria-hidden="true"></span><span>Los datos de colaboradores están protegidos con autenticación y permisos de base de datos.</span></div>
+  </div>
 </section>
 <section id="dashboard" class="dashboard" hidden>
-  <div class="welcome"><div><span class="eyebrow">GESTIÓN DE COLABORACIONES · BOLIVIA</span><h1>La comunidad, en movimiento.</h1><p>Cada iniciativa tiene un lugar y un seguimiento.</p></div><div class="toolbar"><button id="reload" type="button">Actualizar ↻</button><button id="export" type="button">Exportar CSV</button></div></div>
+  <div class="welcome">
+  <div class="welcome-title"><div class="welcome-kicker"><span class="welcome-live" aria-hidden="true"></span> CENTRO DE COORDINACIÓN · BOLIVIA</div><h1>Cada gesto <em>cuenta.</em></h1><p>Una vista clara de las propuestas que mantienen viva nuestra misión.</p></div>
+  <div class="toolbar"><span class="toolbar-note">GESTIÓN DE SOLICITUDES</span><button id="reload" type="button">Actualizar ↻</button><button id="export" type="button">Exportar CSV ↓</button></div>
+</div>
   <div class="stats">
-    <article><span>Nuevas</span><strong id="stat-new">—</strong><small>Pendientes de atención</small></article>
-    <article><span>En coordinación</span><strong id="stat-progress">—</strong><small>Contacto y seguimiento</small></article>
-    <article><span>Completadas</span><strong id="stat-done">—</strong><small>Acciones realizadas</small></article>
-    <article><span>Solicitudes recientes</span><strong id="stat-all">—</strong><small>Hasta 500 registros</small></article>
+    <article class="stat-new"><div class="stat-top"><span>Nuevas</span><span class="stat-orb"></span></div><strong id="stat-new">—</strong><small>Pendientes de atención</small></article>
+    <article class="stat-progress"><div class="stat-top"><span>En coordinación</span><span class="stat-orb"></span></div><strong id="stat-progress">—</strong><small>Contacto y seguimiento</small></article>
+    <article class="stat-done"><div class="stat-top"><span>Completadas</span><span class="stat-orb"></span></div><strong id="stat-done">—</strong><small>Acciones realizadas</small></article>
+    <article class="stat-total"><div class="stat-top"><span>Solicitudes recientes</span><span class="stat-orb"></span></div><strong id="stat-all">—</strong><small>Hasta 500 registros</small></article>
   </div>
   <div class="workspace">
     <section class="inbox">
-      <div class="section-heading"><div><span class="eyebrow">BANDEJA DE ENTRADA</span><h2>Propuestas recibidas</h2></div><span id="visible-count" class="pill">0 resultados</span></div>
+      <div class="section-heading"><div><span class="eyebrow">BANDEJA DE ENTRADA</span><h2>Propuestas recibidas</h2><p>Revisa, clasifica y acompaña cada propuesta.</p></div><span id="visible-count" class="pill">0 resultados</span></div>
       <div class="filters">
         <label><span class="sr-only">Buscar solicitudes</span><input id="search" type="search" placeholder="Buscar nombre, ciudad o propuesta..."></label>
         <label><span class="sr-only">Estado</span><select id="filter-status"><option value="">Todos los estados</option><option value="nueva">Nueva</option><option value="contactada">Contactada</option><option value="en_coordinacion">En coordinación</option><option value="completada">Completada</option><option value="archivada">Archivada</option></select></label>
